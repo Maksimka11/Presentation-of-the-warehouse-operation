@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wildberries", "Wildberries\Wildberries.csproj", "{78FB3CA2-5984-40AE-AB0B-56D8D89B7E1F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{78FB3CA2-5984-40AE-AB0B-56D8D89B7E1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78FB3CA2-5984-40AE-AB0B-56D8D89B7E1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78FB3CA2-5984-40AE-AB0B-56D8D89B7E1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78FB3CA2-5984-40AE-AB0B-56D8D89B7E1F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F85ABBA8-1F4E-40F8-B021-6E7DB6EAC84D}
+	EndGlobalSection
+EndGlobal

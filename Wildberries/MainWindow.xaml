@@ -1,0 +1,262 @@
+﻿<Window x:Class="Wildberries.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Wildberries"
+        mc:Ignorable="d"
+        Title="Система управления оптовым складом" ResizeMode="CanResize"  Height="900" WindowState="Maximized" Width="1200" Loaded="Window_Loaded">
+    <Window.Resources>
+        <DataTemplate x:Key="Order">
+            <DataGrid HeadersVisibility="None" Height="60" ItemsSource="{Binding Order}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Width="60" Binding="{Binding Count}"/>
+                    <DataGridTextColumn Width="60" Binding="{Binding Unit}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="Deliver">
+            <DataGrid HeadersVisibility="None" Height="60" ItemsSource="{Binding Deliver}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Width="60" Binding="{Binding Count}"/>
+                    <DataGridTextColumn Width="60" Binding="{Binding Unit}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <ToolBar>
+            <ToolBar.Items>
+                <StackPanel Orientation="Horizontal">
+                    <Button Background="{x:Null}" x:Name="btnStart" Click="btnStart_Click" BorderBrush="{x:Null}">
+                        <Image Source="./Resourses/start.png"/>
+                    </Button>
+                    <Label Content="Начать" VerticalAlignment="Center"/>
+                </StackPanel>
+                <Separator Width="2"/>
+                <StackPanel Orientation="Horizontal">
+                    <Button Background="{x:Null}" x:Name="btnSingle" Click="btnSingle_Click" BorderBrush="{x:Null}">
+                        <Image Source="./Resourses/single.png"/>
+                    </Button>
+                    <Label Content="Сделать шаг" VerticalAlignment="Center"/>
+                </StackPanel>
+                <Separator Width="2"/>
+                <StackPanel Orientation="Horizontal">
+                    <Button Background="{x:Null}" x:Name="btnStop" Click="btnStop_Click" BorderBrush="{x:Null}">
+                        <Image Source="./Resourses/stop.png"/>
+                    </Button>
+                    <Label Content="Завершить" VerticalAlignment="Center"/>
+                </StackPanel>
+            </ToolBar.Items>
+        </ToolBar>
+        <TabControl x:Name="tcMain" Grid.Row="1">
+            <TabItem Header="Параметры">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Период моделирования (дн.) (10-30)"/>
+                    <TextBox x:Name="tbPeriod" Grid.Column="1" Text="20" PreviewTextInput="PreviewText" />
+                    <Label Content="Количество магазинов (3-9)" Grid.Row="1"/>
+                    <TextBox x:Name="tbShops" Grid.Column="1" Text="5" Grid.Row="1" PreviewTextInput="PreviewText" />
+                    <Label Content="Количество видов продуктов (12-20)" Grid.Row="2"/>
+                    <TextBox x:Name="tbProductsType" Grid.Column="1" Text="12" Grid.Row="2" PreviewTextInput="PreviewText" />
+                    <Label Content="Вероятность заказа продуктов (%)" Grid.Row="3"/>
+                    <TextBox x:Name="tbChance" Grid.Column="1" Grid.Row="3" Text="50"  PreviewTextInput="PreviewText" />
+                    <Label Content="Количество видов заказываемых продуктов, мин." Grid.Row="4"/>
+                    <TextBox x:Name="tbTypeCountMin" Grid.Column="1" Grid.Row="4" Text="1" PreviewTextInput="PreviewText" />
+                    <Label Content="Количество видов заказываемых продуктов, макс." Grid.Row="5"/>
+                    <TextBox x:Name="tbTypeCountMax" Grid.Column="1" Grid.Row="5" Text="5" PreviewTextInput="PreviewText" />
+                    <Label Content="Количество единиц заказываемых продуктов, мин." Grid.Row="6"/>
+                    <TextBox x:Name="tbProductCountMin" Grid.Column="1" Grid.Row="6" Text="1" PreviewTextInput="PreviewText" />
+                    <Label Content="Количество единиц заказываемых продуктов, макс." Grid.Row="7"/>
+                    <TextBox x:Name="tbProductCountMax" Grid.Column="1" Grid.Row="7" Text="10" PreviewTextInput="PreviewText" />
+                    <Label Content="Срок уценки(дн.) (1-10)" Grid.Row="8"/>
+                    <TextBox x:Name="tbSaleTerm" Grid.Column="1" Grid.Row="8" Text="5" PreviewTextInput="PreviewText" />
+                    <Label Content="Процент уценки(%) (0-50)" Grid.Row="9"/>
+                    <TextBox x:Name="tbSaleProc" Grid.Column="1" Grid.Row="9" Text="15" PreviewTextInput="PreviewText" />
+                    <DataGrid Grid.Row="10" x:Name="dgProducts" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="False"  Grid.ColumnSpan="2">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="№" Binding="{Binding Id}" Width="40"/>
+                            <DataGridTextColumn Header="Наименование" Binding="{Binding Name}" Width="*"/>
+                            <DataGridTextColumn Header="Ед. изм." Binding="{Binding Unit}" Width="60"/>
+                            <DataGridTextColumn Header="Цена за ед.(у.е.)" Binding="{Binding UnitPrice}" Width="100"/>
+                            <DataGridTextColumn Header="Срок годности (дн.)" Binding="{Binding Term}" Width="*"/>
+                            <DataGridTextColumn Header="Размер оптовой упаковки" Binding="{Binding WholesaleSize}" Width="*"/>
+                            <DataGridTextColumn Header="Начальное количество" Binding="{Binding StartCount}" Width="*"/>
+                            <DataGridTextColumn Header="Минимальное количество" Binding="{Binding MinCount}" Width="*"/>
+                            <DataGridTextColumn Header="Максимальное количество" Binding="{Binding MaxCount}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+
+            </TabItem>
+            <TabItem Header="Моделирование">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
+                        <Label Content="Сделано шагов: "/>
+                        <Label x:Name="lblStepCount" Content="0"/>
+                    </StackPanel>
+                    
+                    <Grid Grid.Row="1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Label Content="Список продуктов на складе(опт. уп.)"/>
+                            <DataGrid Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" x:Name="dgStorageProduct">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Наименование" Width="*" Binding="{Binding Name}"/>
+                                    <DataGridTextColumn Header="Ед. изм." Width="60" Binding="{Binding Unit}"/>
+                                    <DataGridTextColumn Header="Цена (у.е.)" Width="*" Binding="{Binding UnitPrice}"/>
+                                    <DataGridTextColumn Header="Срок годности" Width="*" Binding="{Binding Term}"/>
+                                    <DataGridTextColumn Header="Время хранения" Width="*" Binding="{Binding StorageTime}"/>
+                                    <DataGridTextColumn Header="Уценка(%)" Width="*" Binding="{Binding Sale}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </Grid>
+
+                    <Grid Grid.Row="1" Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Статистика работы склада"/>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <Label Content="Стоимость проданных продуктов (у.е.)"/>
+                            <Label x:Name="lblSoldProducts" Content="1000"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2" Orientation="Horizontal">
+                            <Label Content="Потеря стоимости уценненых продуктов (у.е.)"/>
+                            <Label x:Name="lblSaleProducts" Content="1000"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="3" Orientation="Horizontal">
+                            <Label Content="Потеря стоимости списанных продуктов (у.е.)"/>
+                            <Label x:Name="lblLostProducts" Content="1000"/>
+                        </StackPanel>
+                        <Label Grid.Row="4" Content="Количество проданных продуктов"/>
+                        <DataGrid x:Name="dgStatistics" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" Grid.Row="5">
+                            <DataGrid.Columns >
+                                <DataGridTextColumn Header="Наименование" Binding="{Binding Name}"/>
+                                <DataGridTextColumn Binding="{Binding Count}"/>
+                                <DataGridTextColumn Binding="{Binding Unit}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+                    <Grid Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Заказы на доставку продуктов со склада в магазины"/>
+                        <DataGrid x:Name="dgOrderToShop" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Grid.Row="1">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="№ магазина" Binding="{Binding ShopNumber}"/>
+                                <DataGridTemplateColumn Header="Состав заказа" Width="300" CellTemplate="{StaticResource Order}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+                    <Grid Grid.Row="2" Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Запланированные перевозки продуктов в магазины"/>
+                            <DataGrid x:Name="dgDeliverToShop" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Grid.Row="1">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="№ магазина" Binding="{Binding ShopNumber}"/>
+                                    <DataGridTemplateColumn Header="Состав заказа" Width="300" CellTemplate="{StaticResource Deliver}"/>
+                                <DataGridCheckBoxColumn Header="Утверждено" Width="100" Binding="{Binding Approved}"/>
+                            </DataGrid.Columns>
+                            </DataGrid>
+                    </Grid>
+
+                    <Grid Grid.Row="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Текущие доставки продуктов на склад"/>
+                        <DataGrid x:Name="dgCurrentOrdersToStorage" AutoGenerateColumns="False" ItemsSource="{Binding currentOrders}" CanUserAddRows="False" CanUserDeleteRows="False" Grid.Row="1">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Наименование" Width="auto" Binding="{Binding Name}"/>
+                                <DataGridTextColumn Header="Количество" Width="auto" Binding="{Binding Count}"/>
+                                <DataGridTextColumn Header="Время доставки" Width="auto" Binding="{Binding DeliveryTime}"/>
+                                <DataGridTextColumn Header="Время в пути" Width="auto" Binding="{Binding CurrentTime}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+                    <Grid Grid.Row="3" Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Запланированные заявки на доставку продуктов на склад"/>
+                        <DataGrid x:Name="dgOrderToStorage" ItemsSource="{Binding StorageOrders}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Grid.Row="1">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Наименование" Binding="{Binding Name}" Width="auto"/>
+                                <DataGridTextColumn Header="Количество" Binding="{Binding Count}" Width="auto"/>
+                                <DataGridCheckBoxColumn Header="Утверждено" Binding="{Binding Approved}" Width="auto"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+                    <Grid Grid.Row="4" Grid.ColumnSpan="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Журнал работы"/>
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible">
+                            <TextBlock x:Name="tbHistory"/>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        
+    </Grid>
+    
+</Window>
